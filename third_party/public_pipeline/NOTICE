@@ -1,0 +1,4 @@
+config.py, queue_features.py, queue_ongoing.py and base_panel.py are copied unchanged from the public
+TrafficFlowBench 0.86517 pipeline by anubisyy (Kaggle dataset anubisyy/trafficflowbench-086517-public-assets
+and its companion notebook anubisyy/catboost-lgbm-nnls-pipeline-top-50-0-86517, folder tfb_source/).
+They are licensed under the Apache License 2.0; a copy of the license is in ../../LICENSE.

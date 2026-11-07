@@ -1,0 +1,7 @@
+__pycache__/
+.DS_Store
+run/
+*.npz
+*.parquet
+submission*.csv
+sub_*.csv
