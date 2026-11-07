@@ -22,7 +22,7 @@ python run_all.py --data /path/to/competition/input --assets /path/to/trafficflo
 
 `./run.sh` does the same with a dependency check first (`./run.sh help` lists its options). The result is `run/s07_submission/submission.csv`. If a copy of our submitted `sub_e50.csv` is anywhere under the inputs, stage 07 also compares the two cell by cell and prints the differences.
 
-**Hardware and runtime.** One NVIDIA T4 (16 GB), 4 CPU cores, 30 GB RAM, as in a Kaggle GPU notebook: about 7 hours in total, of which about 4.5 hours is the four Task 1 U-Net seeds on the GPU. No internet access is needed.
+**Hardware and runtime.** One NVIDIA T4 (16 GB), 4 CPU cores, 30 GB RAM, as in a Kaggle GPU notebook: about 6 hours in total (5.9 hours measured), of which 3.9 hours is the four Task 1 U-Net seeds on the GPU. No internet access is needed.
 
 **Environment** (Kaggle Python image, November 2026): Python 3.13, numpy 2.1.3, pandas 2.3.3, scipy 1.16.3, pyarrow 23.0.1, LightGBM 4.6.0, CatBoost 1.2.10, PyTorch 2.11 (CUDA build).
 
@@ -50,6 +50,8 @@ python run_all.py --data /path/to/competition/input --assets /path/to/trafficflo
 
 We reran this package from scratch on Kaggle, with only the competition data, the public assets dataset and a copy of `sub_e50.csv` (for the comparison) attached.
 
+* **Full run** (GPU notebook: one T4, 4 CPU cores, 30 GB RAM; no flags): 5.9 hours (stage 01 11 min, 06 14 min, 04 31 min, 05 63 min, 02 3.9 hours for the four seeds, 03 1 min, 07 1 min). Both online-rule checks passed on all 80 windows. Compared with `sub_e50.csv` cell by cell, the queue cells are identical (the same 273 onset and 10,119 ongoing cells set to 1), the state values differ by at most 0.0001 km/h in speed and 0.0005 veh/h in flow, and the ODME path flows by at most 0.043 (mean difference 0.00004; mean flow 22.2). As a late submission the rerun file scores 0.87520 private and 0.88236 public, exactly the scores of the selected file.
+* **Final code.** The full run used the package as it was before two later changes (split dates read from the data, `--task2-only`). Stages 02, 03 and 06 have not changed since, and stage 07 of the final code, run on that run's stage outputs, writes a byte-identical `submission.csv` (same MD5). The Task 2 run below used the final code.
 * **Task 2 only** (`--task2-only`, CPU notebook: 4 cores, 30 GB RAM, no GPU): 118 minutes (stage 01 13 min, 04 35 min, 05 68 min, 07 1 min). The split dates read from the data were train 2030-06-01 (273 days), validation 2031-03-01 (31 days) and private 2031-04-01 (30 days). Both online-rule checks passed on all 80 windows: the largest difference was 2.4e-7 in the onset features and 0 in the ongoing features and probabilities. The queue predictions are identical to those of `sub_e50.csv`: the same 273 onset cells and the same 10,119 ongoing cells are set to 1, and no others.
 
 ## The online rule (Task 2)

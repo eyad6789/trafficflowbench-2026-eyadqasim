@@ -300,10 +300,15 @@ which the rules allow for offline tasks.</p>
 <h2>10. Reproducibility</h2>
 <p><code>python run_all.py --data &lt;competition input&gt; --assets &lt;public assets&gt; --out run</code> runs seven stages: s01 data preparation,
 s06 ODME, s04 onset, s05 ongoing, s02 four U-Net seeds (2026, 7, 11, 23), s03 state merge and s07 submission, which writes
-<code>run/s07_submission/submission.csv</code> and, given a copy of our submitted file, compares the two cell by cell. Runtime on a Kaggle machine with
-4 CPUs, one T4 GPU and 30 GB RAM: about 7 hours (4.5 for the U-Nets). The stages are plain scripts and also run unchanged as Kaggle notebooks.
-The Task 2 stages read each split's dates from the data, and <code>run_all.py --task2-only</code> runs only them (stages 01, 04, 05, 07), for a newly
-generated month in the same layout.</p>
+<code>run/s07_submission/submission.csv</code> and, given a copy of our submitted file, compares the two cell by cell. The stages are plain scripts and
+also run unchanged as Kaggle notebooks. The Task 2 stages read each split's dates from the data, and <code>run_all.py --task2-only</code> runs only them
+(stages 01, 04, 05, 07), for a newly generated month in the same layout. Code: <code>github.com/eyad6789/trafficflowbench-2026-eyadqasim</code>.</p>
+<p><b>Verification.</b> We reran the package from scratch on Kaggle, with only the competition data, the public assets and a copy of our submitted
+file attached. On a GPU notebook (4 CPUs, one T4, 30 GB RAM) the seven stages took 5.9 hours, 3.9 of them for the four U-Nets. Both online-rule checks passed and the file matches the submitted one: identical queue cells, state values within 0.0001 km/h and 0.0005 veh/h, ODME path flows within 0.043 (mean flow 22.2); as a late submission it scores 0.87520 private and 0.88236 public, exactly the scores of the submitted file. This run used the package before two later changes (split dates read from the data, <code>--task2-only</code>); stages 02, 03 and 06 are unchanged since, and stage 07 of the final code, run on its stage outputs, writes the same file byte for byte.
+On a CPU notebook (4 cores, 30 GB RAM, no GPU) <code>--task2-only</code> took 118 minutes, read the split dates correctly (train from 2030-06-01,
+273 days; March 31 days; April 30 days) and passed both online-rule checks on all 80 windows (largest difference 2.4e-7 in the onset features,
+0 in the ongoing features and probabilities). Its queue predictions are identical to those of the submitted file: the same 273 onset and
+10,119 ongoing cells are set to 1.</p>
 <p><b>External data and code.</b> No external data. The public 0.86517 pipeline of <i>anubisyy</i> (dataset trafficflowbench-086517-public-assets,
 Apache-2.0): its onset and ongoing checkpoints (onset probabilities for the first window of a month; the ongoing model as comparison only) and its
 feature code as written out by its companion notebook (config.py, queue_features.py, queue_ongoing.py, base_panel.py, unchanged in third_party/). Libraries: numpy, pandas, scipy, pyarrow, LightGBM, CatBoost,

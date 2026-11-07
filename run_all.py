@@ -6,7 +6,7 @@
 anubisyy/trafficflowbench-086517-public-assets (onset/ongoing checkpoints of the 0.86517 public pipeline, Apache-2.0).
 On Kaggle both are found under /kaggle/input and the flags can be left out. Stages run in order; each writes to its own
 folder under --out and reads the earlier folders, the data and the assets. The final file is <out>/s07_submission/submission.csv.
-Runtime on a Kaggle T4 machine (4 CPU, 1 GPU, 30 GB RAM): about 7 h, of which about 4.5 h is the four Task 1 U-Net seeds on the GPU.
+Runtime on a Kaggle T4 machine (4 CPU, 1 GPU, 30 GB RAM): about 6 h (5.9 h measured), of which 3.9 h is the four Task 1 U-Net seeds on the GPU.
 """
 import argparse, os, subprocess, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__))
